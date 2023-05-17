@@ -8,6 +8,7 @@ half_w = track_width / 2;
 
 
 module straight() {
+    translate([0, -half_w, 0])
     cube([track_length, track_width, track_height]);
 }
 
@@ -25,5 +26,3 @@ module bridge() {
 
 curve();
 straight();
-//translate([track_length, 0, 0])
-//straight();
