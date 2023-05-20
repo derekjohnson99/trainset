@@ -5,7 +5,7 @@ track_length = 100;
 track_height = 2.5;
 curves_in_circle = 8;
 half_w = track_width / 2;
-
+p_w = track_length + half_w;
 
 module straight() {
     translate([0, -half_w, 0])
@@ -17,6 +17,7 @@ module curve() {
         difference() {
             circle(track_length + half_w);
             circle(track_length - half_w);
+            polygon([[0,0], [p_w, p_w], [-p_w, p_w], [-p_w, -p_w], [p_w, -p_w], [p_w, 0]]);
         }
     }
 }
