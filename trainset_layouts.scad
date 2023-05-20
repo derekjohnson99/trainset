@@ -7,7 +7,8 @@ curves_in_circle = 8;
 half_w = track_width / 2;
 p_w = track_length + half_w;
 
-module straight() {
+module straight(start_point=([0,0]), angle=0) {
+    translate(start_point)
     translate([0, -half_w, 0])
     cube([track_length, track_width, track_height]);
 }
@@ -27,3 +28,4 @@ module bridge() {
 
 curve();
 straight();
+straight([20,20]);
