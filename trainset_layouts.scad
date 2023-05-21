@@ -13,7 +13,8 @@ module straight(start_point=([0,0]), angle=0) {
     cube([track_length, track_width, track_height]);
 }
 
-module curve() {
+module curve(start_point=([0,0]), angle=0) {
+    translate(start_point)
     translate([0, track_length])
     linear_extrude(track_height) {
         difference() {
@@ -31,3 +32,4 @@ module bridge() {
 curve();
 straight();
 straight([20,20]);
+curve([-50, -50]);
