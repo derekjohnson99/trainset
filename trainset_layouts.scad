@@ -6,6 +6,7 @@ track_height = 2;
 curves_in_circle = 8;
 half_w = track_width / 2;
 p_w = track_length + half_w;
+curve_angle = 360 / 8;
 
 module straight(start_point=([0,0]), angle=0) {
     translate(start_point)
@@ -29,17 +30,8 @@ module a_curve(start_point=([0,0]), angle=0) {
 }
 
 module c_curve(start_point=([0,0]), angle=0) {
-    translate(start_point)
-    rotate([0, 0, angle])
-    translate([0, -track_length])
-    linear_extrude(track_height) {
-        difference() {
-            circle(track_length + half_w);
-            circle(track_length - half_w);
-            polygon([[0, 0], [0, p_w], [-p_w, p_w], [-p_w, -p_w], [p_w, -p_w], [p_w, 0]]);
-            polygon([[0, 0], [2*p_w, 0], [2*p_w, 2*p_w]]);
-        }
-    }
+    mirror([0, 1, 0])
+    a_curve(start_point, angle);
 }
 
 module bridge() {
