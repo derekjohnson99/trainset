@@ -6,7 +6,8 @@ track_height = 2;
 curves_in_circle = 8;
 half_w = track_width / 2;
 p_w = track_length + half_w;
-curve_angle = 360 / 8;
+curve_angle = 360 / 16;
+curve_length = track_length * 2 * sin(curve_angle);
 
 module straight(start_point=([0,0,0]), angle=0) {
     translate(start_point)
@@ -24,7 +25,7 @@ module a_curve(start_point=([0,0,0]), angle=0) {
             circle(track_length + half_w);
             circle(track_length - half_w);
             polygon([[0, 0], [0, -p_w], [-p_w, -p_w], [-p_w, p_w], [p_w, p_w], [p_w, 0]]);
-            polygon([[0, 0], [2*p_w, 0], [2*p_w, -2*p_w]]);
+            polygon([[0, 0], [p_w, 0], [p_w, -p_w]]);
         }
     }
 }
@@ -56,10 +57,13 @@ straight();
 joint([track_length, 0, 0]);
 c_curve([track_length, 0, 0]);
 a_curve();
-joint([track_length * cos(curve_angle),
-       track_length * sin(curve_angle/3), 0],
-       curve_angle);
+
+joint([curve_length * cos(curve_angle),
+       curve_length * sin(curve_angle), 0],
+       curve_angle*2);
 //straight([20,20, 0], 30);
 //curve([-50, -50, 0], -60);
 color("red")
-bridge([-track_length, -40, 0], 60);
+bridge([curve_length + cos(curve_angle),
+        curve_length + sin(curve_angle), 0],
+        curve_angle*2);
