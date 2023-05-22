@@ -37,6 +37,9 @@ module c_curve(start_point=([0,0]), angle=0) {
 module bridge() {
 }
 
+$fa = 1;
+$fs = 0.4;
+
 straight();
 c_curve([track_length, 0]);
 a_curve();
