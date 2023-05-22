@@ -36,10 +36,10 @@ module c_curve(start_point=([0,0,0]), angle=0) {
 }
 
 module bridge(start_point=([0,0,0]), angle=0) {
-    straight(start_point, angle);
-    straight([start_point[0] + track_length * cos(angle),
-              start_point[1] + track_length * sin(angle), 0],
-              angle);
+    translate(start_point)
+    rotate([0, 0, angle])
+    translate([0, -half_w, 0])
+    cube([2*track_length, track_width, track_height]);
 }
 
 module joint(start_point=([0,0,0]), angle=0) {
@@ -61,9 +61,8 @@ a_curve();
 joint([curve_length * cos(curve_angle),
        curve_length * sin(curve_angle), 0],
        curve_angle*2);
-//straight([20,20, 0], 30);
-//curve([-50, -50, 0], -60);
+
 color("red")
-bridge([curve_length + cos(curve_angle),
-        curve_length + sin(curve_angle), 0],
+bridge([curve_length * cos(curve_angle),
+        curve_length * sin(curve_angle), 0],
         curve_angle*2);
