@@ -34,14 +34,28 @@ module c_curve(start_point=([0,0]), angle=0) {
     a_curve(start_point, angle);
 }
 
-module bridge() {
+module bridge(start_point=([0,0]), angle=0) {
+    translate(start_point)
+    rotate([0, 0, angle])
+    straight();
+}
+
+module joint(start_point=([0,0]), angle=0) {
+    translate(start_point)
+    rotate([0, 0, angle])
+    difference() {
+        cube(3);
+        cube(1);
+    }
 }
 
 $fa = 1;
 $fs = 0.4;
 
 straight();
+joint([track_length, 40]);
 c_curve([track_length, 0]);
 a_curve();
 //straight([20,20], 30);
 //curve([-50, -50], -60);
+bridge([-track_length, -40], 60);
