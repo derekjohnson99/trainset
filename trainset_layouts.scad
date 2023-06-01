@@ -32,8 +32,17 @@ module a_curve(start_point=([0,0,0]), angle=0) {
 }
 
 module c_curve(start_point=([0,0,0]), angle=0) {
-    mirror([0, 1, 0])
-    a_curve(start_point, angle);
+    translate(start_point)
+    rotate([0, 0, angle])
+    translate([0, -track_length])
+    linear_extrude(track_height) {
+        difference() {
+            circle(track_length + half_w);
+            circle(track_length - half_w);
+            polygon([[0, 0], [0, p_w], [-p_w, p_w], [-p_w, -p_w], [p_w, -p_w], [p_w, 0]]);
+            polygon([[0, 0], [p_w, 0], [p_w, p_w]]);
+        }
+    }
 }
 
 module bridge(start_point=([0,0,0]), angle=0) {
@@ -53,24 +62,42 @@ module joint(start_point=([0,0,0]), angle=0) {
 $fa = 1;
 $fs = 0.4;
 
+//curr_point = [0, 0, 0];
+curr_angle = 0;
+
+sp = [ for (a = [0 : len(layout)-1])
+    let (item = layout[a],
+         x = track_length * floor(a / 4),
+         y = track_length * (a % 4))
+    [x, y, 0]];
+echo(sp);
+
 for (a = [0 : len(layout)-1])
 {
+    let (curr_point = [track_length * a, 
+                       0,
+                       0],
+         curr_angle = 0)
+    {
     item = layout[a];
     if (item == "A")
     {
-        a_curve();
-    } 
+        a_curve(sp[a], curr_angle);
+        //curr_angle = curr_angle - curve_angle;
+    }
     else if (item == "C")
     {
-        c_curve();
+        c_curve(sp[a], curr_angle);
+        //curr_angle = curr_angle + curve_angle;
     }
     else if (item == "S")
     {
-        straight();
+        straight(sp[a], curr_angle);
     }
     else if (item == "B")
     {
-        bridge();
+        bridge(sp[a], curr_angle);
+    }
     }
 }
 
