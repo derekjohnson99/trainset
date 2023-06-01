@@ -1,5 +1,6 @@
 // OpenSCAD file to display all possible layouts of Ikea Lillabo 20-piece basic trainset
 
+layout = ["A", "A", "A", "A", "A", "A", "S", "S", "C", "C", "C", "C", "C", "C", "B"];
 track_width = 8;
 track_length = 64;
 track_height = 2;
@@ -46,23 +47,45 @@ module joint(start_point=([0,0,0]), angle=0) {
     translate(start_point)
     rotate([0, 0, angle])
     translate([-0.2, -half_w, 0])
-    cube([0.4, track_width, track_height + 0.4]);
+    cube([0.4, track_width, track_height + 1]);
 }
 
 $fa = 1;
 $fs = 0.4;
 
-joint();
-straight();
-joint([track_length, 0, 0]);
-c_curve([track_length, 0, 0]);
-a_curve();
+for (a = [0 : len(layout)-1])
+{
+    item = layout[a];
+    if (item == "A")
+    {
+        a_curve();
+    } 
+    else if (item == "C")
+    {
+        c_curve();
+    }
+    else if (item == "S")
+    {
+        straight();
+    }
+    else if (item == "B")
+    {
+        bridge();
+    }
+}
 
-joint([curve_length * cos(curve_angle),
-       curve_length * sin(curve_angle), 0],
-       curve_angle*2);
+//joint();
+//straight();
+//joint([track_length, 0, 0]);
+//c_curve([track_length, 0, 0]);
+//a_curve();
 
-color("red")
-bridge([curve_length * cos(curve_angle),
-        curve_length * sin(curve_angle), 0],
-        curve_angle*2);
+//joint([curve_length * cos(curve_angle),
+//       curve_length * sin(curve_angle), 0],
+//       curve_angle*2);
+
+//color("red")
+//bridge([curve_length * cos(curve_angle),
+//        curve_length * sin(curve_angle), 0],
+//        curve_angle*2);
+
