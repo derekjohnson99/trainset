@@ -7,8 +7,7 @@ track_height = 2;
 curves_in_circle = 8;
 half_w = track_width / 2;
 p_w = track_length + half_w;
-curve_angle = 360 / 16;
-curve_length = track_length * 2 * sin(curve_angle);
+curve_angle = 360 / curves_in_circle;
 
 module straight(start_point=([0,0,0]), angle=0) {
     translate(start_point)
@@ -90,32 +89,36 @@ echo(th);
 
 function sumv(v, i, s=0)  = (i == s ? v[i] : v[i] + sumv(v, i-1, s));
 
+start_angles = [ for (i = [0 : len(th)-1])
+    let (angle = sumv(th, i))
+    angle];
+echo(start_angles);
+
 for (a = [0 : len(layout)-1])
 {
-    let (curr_angle = sumv(th, a))
     {
     item = layout[a];
     color("green")
-    joint(sp[a], curr_angle);
+    joint(sp[a], start_angles[a]);
     if (item == "A")
     {
         color("cyan")
-        a_curve(sp[a], curr_angle);
+        a_curve(sp[a], start_angles[a]);
     }
     else if (item == "C")
     {
         color("blue")
-        c_curve(sp[a], curr_angle);
+        c_curve(sp[a], start_angles[a]);
     }
     else if (item == "S")
     {
         color("yellow")
-        straight(sp[a], curr_angle);
+        straight(sp[a], start_angles[a]);
     }
     else if (item == "B")
     {
         color("red")
-        bridge(sp[a], curr_angle);
+        bridge(sp[a], start_angles[a]);
     }
     }
 }
