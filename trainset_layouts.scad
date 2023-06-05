@@ -85,7 +85,6 @@ th = [ 0, for (a = [0: len(layout)-1])
             0
         )
         angle];
-echo(th);
 
 function sumv(v, i, s=0)  = (i == s ? v[i] : v[i] + sumv(v, i-1, s));
 
@@ -93,6 +92,22 @@ start_angles = [ for (i = [0 : len(th)-1])
     let (angle = sumv(th, i))
     angle];
 echo(start_angles);
+
+lengths = [ for (i = [0 : len(layout)-1])
+    let (item = layout[i],
+         length = (item == "A") ?
+            2 * sin(curve_angle/2)
+         : (item == "C") ?
+            2 * sin(curve_angle/2)
+         : (item == "S") ?
+            1
+         : (item == "B") ?
+            2
+         :
+            undef
+        )
+        length];
+echo(lengths);
 
 for (a = [0 : len(layout)-1])
 {
