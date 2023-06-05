@@ -72,6 +72,22 @@ sp = [ for (a = [0 : len(layout)-1])
     [x, y, 0]];
 echo(sp);
 
+th = [ for (a = [0: len(layout)-1])
+   let (item = layout[a],
+        angle = (item == "A") ? 
+            -curve_angle
+        : (item == "C") ?
+            curve_angle
+        : (item == "S") ?
+            0
+        : (item == "B") ?
+            0
+        :
+            0
+        )
+        angle];
+echo(th);
+
 for (a = [0 : len(layout)-1])
 {
     let (curr_point = [track_length * a, 
