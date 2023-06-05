@@ -67,8 +67,8 @@ curr_angle = 0;
 
 sp = [ for (a = [0 : len(layout)-1])
     let (item = layout[a],
-         x = track_length * floor(a / 4),
-         y = track_length * (a % 4))
+         x = track_length * (a % 4),
+         y = track_length * floor(a / 4))
     [x, y, 0]];
 echo(sp);
 
@@ -93,25 +93,29 @@ for (a = [0 : len(layout)-1])
     let (curr_point = [track_length * a, 
                        0,
                        0],
-         curr_angle = 0)
+         curr_angle = (a == 0) ? 0 : curr_angle + th[a-1])
     {
     item = layout[a];
     if (item == "A")
     {
+        color("cyan")
         a_curve(sp[a], curr_angle);
         //curr_angle = curr_angle - curve_angle;
     }
     else if (item == "C")
     {
+        color("blue")
         c_curve(sp[a], curr_angle);
         //curr_angle = curr_angle + curve_angle;
     }
     else if (item == "S")
     {
+        color("yellow")
         straight(sp[a], curr_angle);
     }
     else if (item == "B")
     {
+        color("red")
         bridge(sp[a], curr_angle);
     }
     }
