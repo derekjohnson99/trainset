@@ -92,23 +92,20 @@ function sumv(v, i, s=0)  = (i == s ? v[i] : v[i] + sumv(v, i-1, s));
 
 for (a = [0 : len(layout)-1])
 {
-    let (curr_point = [track_length * a, 
-                       0,
-                       0],
-         curr_angle = sumv(th, a))
+    let (curr_angle = sumv(th, a))
     {
     item = layout[a];
+    color("green")
+    joint(sp[a], curr_angle);
     if (item == "A")
     {
         color("cyan")
         a_curve(sp[a], curr_angle);
-        //curr_angle = curr_angle - curve_angle;
     }
     else if (item == "C")
     {
         color("blue")
         c_curve(sp[a], curr_angle);
-        //curr_angle = curr_angle + curve_angle;
     }
     else if (item == "S")
     {
@@ -122,19 +119,3 @@ for (a = [0 : len(layout)-1])
     }
     }
 }
-
-//joint();
-//straight();
-//joint([track_length, 0, 0]);
-//c_curve([track_length, 0, 0]);
-//a_curve();
-
-//joint([curve_length * cos(curve_angle),
-//       curve_length * sin(curve_angle), 0],
-//       curve_angle*2);
-
-//color("red")
-//bridge([curve_length * cos(curve_angle),
-//        curve_length * sin(curve_angle), 0],
-//        curve_angle*2);
-
