@@ -72,12 +72,12 @@ sp = [ for (a = [0 : len(layout)-1])
     [x, y, 0]];
 echo(sp);
 
-th = [ for (a = [0: len(layout)-1])
+th = [ 0, for (a = [0: len(layout)-1])
    let (item = layout[a],
         angle = (item == "A") ? 
-            -curve_angle
-        : (item == "C") ?
             curve_angle
+        : (item == "C") ?
+            -curve_angle
         : (item == "S") ?
             0
         : (item == "B") ?
@@ -88,12 +88,14 @@ th = [ for (a = [0: len(layout)-1])
         angle];
 echo(th);
 
+function sumv(v, i, s=0)  = (i == s ? v[i] : v[i] + sumv(v, i-1, s));
+
 for (a = [0 : len(layout)-1])
 {
     let (curr_point = [track_length * a, 
                        0,
                        0],
-         curr_angle = (a == 0) ? 0 : curr_angle + th[a-1])
+         curr_angle = sumv(th, a))
     {
     item = layout[a];
     if (item == "A")
