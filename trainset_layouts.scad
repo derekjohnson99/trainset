@@ -93,7 +93,7 @@ start_angles = [ for (i = [0 : len(th)-1])
     angle];
 echo(start_angles);
 
-lengths = [ for (i = [0 : len(layout)-1])
+track_r_thetas = [ for (i = [0 : len(layout)-1])
     let (item = layout[i],
          length = (item == "A") ?
             2 * sin(curve_angle/2)
@@ -104,10 +104,20 @@ lengths = [ for (i = [0 : len(layout)-1])
          : (item == "B") ?
             2
          :
+            undef,
+         angle =  (item == "A") ?
+            -curve_angle/2
+         : (item == "C") ?
+            curve_angle/2
+         : (item == "S") ?
+            0
+         : (item == "B") ?
+            0
+         :
             undef
         )
-        length];
-echo(lengths);
+        [length, angle]];
+echo(track_r_thetas);
 
 for (a = [0 : len(layout)-1])
 {
