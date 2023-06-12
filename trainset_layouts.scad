@@ -86,14 +86,16 @@ th = [ 0, for (a = [0: len(layout)-1])
         )
         angle];
 
-function sumv(v, i, s=0)  = (i == s ? v[i] : v[i] + sumv(v, i-1, s));
+function sumv(v, i) = (i == 0 ? v[i] : v[i] + sumv(v, i-1));
 
 start_angles = [ for (i = [0 : len(th)-1])
     let (angle = sumv(th, i))
     angle];
 echo(start_angles);
 
-track_r_thetas = [ for (i = [0 : len(layout)-1])
+//function calc_x(v, i) = (i == 0 ? v[i]
+
+track_r_thetas = [ [0, 0], for (i = [0 : len(layout)-1])
     let (item = layout[i],
          length = (item == "A") ?
             2 * sin(curve_angle/2)
@@ -106,9 +108,9 @@ track_r_thetas = [ for (i = [0 : len(layout)-1])
          :
             undef,
          angle =  (item == "A") ?
-            -curve_angle/2
+            curve_angle
          : (item == "C") ?
-            curve_angle/2
+            -curve_angle
          : (item == "S") ?
             0
          : (item == "B") ?
