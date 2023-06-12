@@ -93,9 +93,15 @@ start_angles = [ for (i = [0 : len(th)-1])
     angle];
 echo(start_angles);
 
-//function calc_x(v, i) = (i == 0 ? v[i]
+function new_cursor(cursor, piece) = (
+    let (x = cursor[0] + piece[0] * cos(cursor[2] + piece[1]),
+         y = cursor[1] + piece[0] * sin(cursor[2] + piece[1]),
+         angle = cursor[2] + 2 * piece[1])
+        [x, y, angle]);
 
-track_r_thetas = [ [0, 0], for (i = [0 : len(layout)-1])
+echo(new_cursor([0,0,0], [0.77, 22.5]));
+
+track_r_thetas = [ for (i = [0 : len(layout)-1])
     let (item = layout[i],
          length = (item == "A") ?
             2 * sin(curve_angle/2)
