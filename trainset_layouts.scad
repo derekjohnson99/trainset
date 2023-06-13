@@ -62,39 +62,44 @@ $fa = 1;
 $fs = 0.4;
 
 function new_cursor(cursor, piece) = (
-    let (p_len = piece[0],
-         p_angle = piece[1] / 2,
-         x = cursor[0] + p_len * cos(cursor[2] + p_angle),
-         y = cursor[1] + p_len * sin(cursor[2] + p_angle),
-         angle = cursor[2] + 2 * p_angle)
-        [x, y, angle]);
+    let (
+        p_len = piece[0],
+        p_angle = piece[1] / 2,
+        x = cursor[0] + p_len * cos(cursor[2] + p_angle),
+        y = cursor[1] + p_len * sin(cursor[2] + p_angle),
+        angle = cursor[2] + 2 * p_angle
+    )
+    [x, y, angle]
+);
 
 echo("new_cursor test: ", new_cursor([0,0,0], [0.77, 22.5]));
 
 track_r_thetas = [ for (i = [0 : len(layout)-1])
-    let (item = layout[i],
-         length = (item == "A") ?
-            2 * sin(curve_angle/2)
-         : (item == "C") ?
-            2 * sin(curve_angle/2)
-         : (item == "S") ?
-            1
-         : (item == "B") ?
-            2
-         :
+    let (
+        item = layout[i],
+        length = (item == "A") ?
+            track_length * 2 * sin(curve_angle/2)
+        : (item == "C") ?
+            track_length * 2 * sin(curve_angle/2)
+        : (item == "S") ?
+            track_length * 1
+        : (item == "B") ?
+            track_length * 2
+        :
             undef,
-         angle =  (item == "A") ?
+        angle =  (item == "A") ?
             curve_angle
-         : (item == "C") ?
+        : (item == "C") ?
             -curve_angle
-         : (item == "S") ?
+        : (item == "S") ?
             0
-         : (item == "B") ?
+        : (item == "B") ?
             0
-         :
+        :
             undef
-        )
-        [length, angle]];
+    )
+    [length, angle]
+];
 echo("track_r_thetas: ", track_r_thetas);
 
 function place_piece(i) = (
@@ -104,8 +109,10 @@ function place_piece(i) = (
         new_cursor(place_piece(i-1), track_r_thetas[i])
 );
 
-positions = [ [0, 0, 0], for (i = [0 : len(track_r_thetas)-1])
-    place_piece(i)
+positions = [
+    [0, 0, 0], 
+    for (i = [0 : len(track_r_thetas)-1])
+        place_piece(i)
 ];
 echo("positions: ", positions);
 
@@ -116,7 +123,6 @@ for (a = [0 : len(layout)-1])
     item = layout[a];
     color("green")
     joint(start_point, angle);
-    echo("Joint at: ", start_point, angle);
     if (item == "A")
     {
         color("cyan")
