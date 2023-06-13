@@ -8,6 +8,7 @@ curves_in_circle = 8;
 half_w = track_width / 2;
 p_w = track_length + half_w;
 curve_angle = 360 / curves_in_circle;
+origin = [0, 0, 0];
 
 module straight(start_point, angle) {
     translate(start_point)
@@ -61,6 +62,8 @@ module joint(start_point, angle) {
 $fa = 1;
 $fs = 0.4;
 
+// Function to find the new cursor position (x, y and angle) given the
+// original cursor postion, and the details of the track piece
 function new_cursor(cursor, piece) = (
     let (
         p_len = piece[0],
@@ -72,6 +75,8 @@ function new_cursor(cursor, piece) = (
     [x, y, angle]
 );
 
+// Vector of the track piece details (length and angle) for each piece
+// in the track layout
 piece_details = [ for (piece = layout)
     let (
         length = (piece == "A") ?
@@ -98,15 +103,18 @@ piece_details = [ for (piece = layout)
     [length, angle]
 ];
 
+// Function to give the final cursor position (x, y and angle) of the
+// given piece number in the layout
 function place_piece(i) = (
     i == 0 ?
-        new_cursor([0, 0, 0], piece_details[i])
+        new_cursor(origin, piece_details[i])
     :
         new_cursor(place_piece(i-1), piece_details[i])
 );
 
+// Vector of all the track positions for the given track layout
 positions = [
-    [0, 0, 0],
+    origin,
     for (i = [0 : len(piece_details)-1])
         place_piece(i)
 ];
