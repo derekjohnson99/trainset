@@ -9,14 +9,18 @@ half_w = track_width / 2;
 p_w = track_length + half_w;
 curve_angle = 360 / curves_in_circle;
 
-module straight(start_point=([0,0,0]), angle=0) {
+module straight(start_position=([0,0,0])) {
+    let (start_point = [start_position[0], start_position[1], 0],
+         angle = start_position[2])
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, -half_w, 0])
     cube([track_length, track_width, track_height]);
 }
 
-module a_curve(start_point=([0,0,0]), angle=0) {
+module a_curve(start_position=([0,0,0])) {
+    let (start_point = [start_position[0], start_position[1], 0],
+         angle = start_position[2])
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, track_length])
@@ -30,7 +34,9 @@ module a_curve(start_point=([0,0,0]), angle=0) {
     }
 }
 
-module c_curve(start_point=([0,0,0]), angle=0) {
+module c_curve(start_position=([0,0,0])) {
+    let (start_point = [start_position[0], start_position[1], 0],
+         angle = start_position[2])
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, -track_length])
@@ -44,14 +50,18 @@ module c_curve(start_point=([0,0,0]), angle=0) {
     }
 }
 
-module bridge(start_point=([0,0,0]), angle=0) {
+module bridge(start_position=([0,0,0])) {
+    let (start_point = [start_position[0], start_position[1], 0],
+         angle = start_position[2])
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, -half_w, 0])
     cube([2*track_length, track_width, track_height]);
 }
 
-module joint(start_point=([0,0,0]), angle=0) {
+module joint(start_position=([0,0,0])) {
+    let (start_point = [start_position[0], start_position[1], 0],
+         angle = start_position[2])
     translate(start_point)
     rotate([0, 0, angle])
     translate([-0.2, -half_w, 0])
@@ -73,7 +83,7 @@ echo(sp);
 
 th = [ 0, for (a = [0: len(layout)-1])
    let (item = layout[a],
-        angle = (item == "A") ? 
+        angle = (item == "A") ?
             curve_angle
         : (item == "C") ?
             -curve_angle
@@ -143,29 +153,27 @@ echo(positions);
 
 for (a = [0 : len(layout)-1])
 {
-    {
     item = layout[a];
     color("green")
-    joint(sp[a], start_angles[a]);
+    joint(positions[a]);
     if (item == "A")
     {
         color("cyan")
-        a_curve(sp[a], start_angles[a]);
+        a_curve(positions[a]);
     }
     else if (item == "C")
     {
         color("blue")
-        c_curve(sp[a], start_angles[a]);
+        c_curve(positions[a]);
     }
     else if (item == "S")
     {
         color("yellow")
-        straight(sp[a], start_angles[a]);
+        straight(positions[a]);
     }
     else if (item == "B")
     {
         color("red")
-        bridge(sp[a], start_angles[a]);
-    }
+        bridge(positions[a]);
     }
 }
