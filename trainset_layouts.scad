@@ -9,18 +9,14 @@ half_w = track_width / 2;
 p_w = track_length + half_w;
 curve_angle = 360 / curves_in_circle;
 
-module straight(start_position=([0,0,0])) {
-    let (start_point = [start_position[0], start_position[1], 0],
-         angle = start_position[2])
+module straight(start_point, angle) {
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, -half_w, 0])
     cube([track_length, track_width, track_height]);
 }
 
-module a_curve(start_position=([0,0,0])) {
-    let (start_point = [start_position[0], start_position[1], 0],
-         angle = start_position[2])
+module a_curve(start_point, angle) {
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, track_length])
@@ -34,9 +30,7 @@ module a_curve(start_position=([0,0,0])) {
     }
 }
 
-module c_curve(start_position=([0,0,0])) {
-    let (start_point = [start_position[0], start_position[1], 0],
-         angle = start_position[2])
+module c_curve(start_point, angle) {
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, -track_length])
@@ -50,18 +44,14 @@ module c_curve(start_position=([0,0,0])) {
     }
 }
 
-module bridge(start_position=([0,0,0])) {
-    let (start_point = [start_position[0], start_position[1], 0],
-         angle = start_position[2])
+module bridge(start_point, angle) {
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, -half_w, 0])
     cube([2*track_length, track_width, track_height]);
 }
 
-module joint(start_position=([0,0,0])) {
-    let (start_point = [start_position[0], start_position[1], 0],
-         angle = start_position[2])
+module joint(start_point, angle) {
     translate(start_point)
     rotate([0, 0, angle])
     translate([-0.2, -half_w, 0])
@@ -79,7 +69,7 @@ function new_cursor(cursor, piece) = (
          angle = cursor[2] + 2 * p_angle)
         [x, y, angle]);
 
-echo(new_cursor([0,0,0], [0.77, 22.5]));
+echo("new_cursor test: ", new_cursor([0,0,0], [0.77, 22.5]));
 
 track_r_thetas = [ for (i = [0 : len(layout)-1])
     let (item = layout[i],
@@ -105,7 +95,7 @@ track_r_thetas = [ for (i = [0 : len(layout)-1])
             undef
         )
         [length, angle]];
-echo(track_r_thetas);
+echo("track_r_thetas: ", track_r_thetas);
 
 function place_piece(i) = (
     i == 0 ?
@@ -117,31 +107,34 @@ function place_piece(i) = (
 positions = [ [0, 0, 0], for (i = [0 : len(track_r_thetas)-1])
     place_piece(i)
 ];
-echo(positions);
+echo("positions: ", positions);
 
 for (a = [0 : len(layout)-1])
 {
+    start_point = [positions[a][0], positions[a][1], 0];
+    angle = positions[a][2];
     item = layout[a];
     color("green")
-    joint(positions[a]);
+    joint(start_point, angle);
+    echo("Joint at: ", start_point, angle);
     if (item == "A")
     {
         color("cyan")
-        a_curve(positions[a]);
+        a_curve((start_point), angle);
     }
     else if (item == "C")
     {
         color("blue")
-        c_curve(positions[a]);
+        c_curve(start_point, angle);
     }
     else if (item == "S")
     {
         color("yellow")
-        straight(positions[a]);
+        straight(start_point, angle);
     }
     else if (item == "B")
     {
         color("red")
-        bridge(positions[a]);
+        bridge(start_point, angle);
     }
 }
