@@ -72,73 +72,69 @@ function new_cursor(cursor, piece) = (
     [x, y, angle]
 );
 
-echo("new_cursor test: ", new_cursor([0,0,0], [0.77, 22.5]));
-
-track_r_thetas = [ for (i = [0 : len(layout)-1])
+piece_details = [ for (i = [0 : len(layout)-1])
     let (
-        item = layout[i],
-        length = (item == "A") ?
+        piece = layout[i],
+        length = (piece == "A") ?
             track_length * 2 * sin(curve_angle/2)
-        : (item == "C") ?
+        : (piece == "C") ?
             track_length * 2 * sin(curve_angle/2)
-        : (item == "S") ?
+        : (piece == "S") ?
             track_length * 1
-        : (item == "B") ?
+        : (piece == "B") ?
             track_length * 2
         :
             undef,
-        angle =  (item == "A") ?
+        angle =  (piece == "A") ?
             curve_angle
-        : (item == "C") ?
+        : (piece == "C") ?
             -curve_angle
-        : (item == "S") ?
+        : (piece == "S") ?
             0
-        : (item == "B") ?
+        : (piece == "B") ?
             0
         :
             undef
     )
     [length, angle]
 ];
-echo("track_r_thetas: ", track_r_thetas);
 
 function place_piece(i) = (
     i == 0 ?
-        new_cursor([0, 0, 0], track_r_thetas[i])
+        new_cursor([0, 0, 0], piece_details[i])
     :
-        new_cursor(place_piece(i-1), track_r_thetas[i])
+        new_cursor(place_piece(i-1), piece_details[i])
 );
 
 positions = [
-    [0, 0, 0], 
-    for (i = [0 : len(track_r_thetas)-1])
+    [0, 0, 0],
+    for (i = [0 : len(piece_details)-1])
         place_piece(i)
 ];
-echo("positions: ", positions);
 
 for (a = [0 : len(layout)-1])
 {
     start_point = [positions[a][0], positions[a][1], 0];
     angle = positions[a][2];
-    item = layout[a];
+    piece = layout[a];
     color("green")
     joint(start_point, angle);
-    if (item == "A")
+    if (piece == "A")
     {
         color("cyan")
         a_curve((start_point), angle);
     }
-    else if (item == "C")
+    else if (piece == "C")
     {
         color("blue")
         c_curve(start_point, angle);
     }
-    else if (item == "S")
+    else if (piece == "S")
     {
         color("yellow")
         straight(start_point, angle);
     }
-    else if (item == "B")
+    else if (piece == "B")
     {
         color("red")
         bridge(start_point, angle);
