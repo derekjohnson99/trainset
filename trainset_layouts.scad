@@ -72,9 +72,8 @@ function new_cursor(cursor, piece) = (
     [x, y, angle]
 );
 
-piece_details = [ for (i = [0 : len(layout)-1])
+piece_details = [ for (piece = layout)
     let (
-        piece = layout[i],
         length = (piece == "A") ?
             track_length * 2 * sin(curve_angle/2)
         : (piece == "C") ?
@@ -112,26 +111,26 @@ positions = [
         place_piece(i)
 ];
 
-for (a = [0 : len(layout)-1])
+for (i = [0 : len(layout)-1])
 {
-    start_point = [positions[a][0], positions[a][1], 0];
-    angle = positions[a][2];
-    piece = layout[a];
-    color("green")
+    start_point = [positions[i][0], positions[i][1], 0];
+    angle = positions[i][2];
+    piece = layout[i];
+    color("black")
     joint(start_point, angle);
     if (piece == "A")
     {
-        color("cyan")
+        color("blue")
         a_curve((start_point), angle);
     }
     else if (piece == "C")
     {
-        color("blue")
+        color("magenta")
         c_curve(start_point, angle);
     }
     else if (piece == "S")
     {
-        color("yellow")
+        color("lime")
         straight(start_point, angle);
     }
     else if (piece == "B")
