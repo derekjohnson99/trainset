@@ -71,38 +71,6 @@ module joint(start_position=([0,0,0])) {
 $fa = 1;
 $fs = 0.4;
 
-//curr_point = [0, 0, 0];
-curr_angle = 0;
-
-sp = [ for (a = [0 : len(layout)-1])
-    let (item = layout[a],
-         x = track_length * (a % 4),
-         y = track_length * floor(a / 4))
-    [x, y, 0]];
-echo(sp);
-
-th = [ 0, for (a = [0: len(layout)-1])
-   let (item = layout[a],
-        angle = (item == "A") ?
-            curve_angle
-        : (item == "C") ?
-            -curve_angle
-        : (item == "S") ?
-            0
-        : (item == "B") ?
-            0
-        :
-            0
-        )
-        angle];
-
-function sumv(v, i) = (i == 0 ? v[i] : v[i] + sumv(v, i-1));
-
-start_angles = [ for (i = [0 : len(th)-1])
-    let (angle = sumv(th, i))
-    angle];
-echo(start_angles);
-
 function new_cursor(cursor, piece) = (
     let (p_len = piece[0],
          p_angle = piece[1] / 2,
