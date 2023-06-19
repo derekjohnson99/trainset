@@ -49,7 +49,11 @@ module bridge(start_point, angle) {
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, -half_w, 0])
-    cube([2*track_length, track_width, track_height]);
+    difference() {
+        cube([2*track_length, track_width, 5*track_height]);
+        translate([8,0,0])
+        cube([2*track_length-16, track_width, 4*track_height]);
+    }
 }
 
 module joint(start_point, angle) {
