@@ -90,19 +90,6 @@ module joint(start_point, angle) {
 $fa = 1;
 $fs = 0.4;
 
-// Function to find the new cursor position (x, y and angle) given the
-// original cursor postion, and the details of the track piece
-function new_cursor(cursor, piece) = (
-    let (
-        p_len = piece[0],
-        p_angle = piece[1] / 2,
-        x = cursor[0] + p_len * cos(cursor[2] + p_angle),
-        y = cursor[1] + p_len * sin(cursor[2] + p_angle),
-        angle = cursor[2] + 2 * p_angle
-    )
-    [x, y, angle]
-);
-
 // Function to return the length and angle of each type of track piece
 function piece_details(piece) = (
     let (
@@ -130,13 +117,27 @@ function piece_details(piece) = (
     [length, angle]
 );
 
+// Function to find the new cursor position (x, y and angle) given the
+// original cursor postion, and the details of the track piece
+function new_cursor(cursor, piece) = (
+    let (
+        piece_detail = piece_details(piece),
+        p_len = piece_detail[0],
+        p_angle = piece_detail[1] / 2,
+        x = cursor[0] + p_len * cos(cursor[2] + p_angle),
+        y = cursor[1] + p_len * sin(cursor[2] + p_angle),
+        angle = cursor[2] + 2 * p_angle
+    )
+    [x, y, angle]
+);
+
 // Function to give the final cursor position (x, y and angle) of the
 // given piece number in the layout
 function place_piece(i) = (
     i == 0 ?
-        new_cursor(origin, piece_details(layout[i]))
+        new_cursor(origin, layout[i])
     :
-        new_cursor(place_piece(i-1), piece_details(layout[i]))
+        new_cursor(place_piece(i-1), layout[i])
 );
 
 // Vector of all the track positions for the given track layout
@@ -148,8 +149,9 @@ positions = [
 
 for (i = [0 : len(layout)-1])
 {
-    start_point = [positions[i][0], positions[i][1], 0];
-    angle = positions[i][2];
+    pos = positions[i];
+    start_point = [pos[0], pos[1], 0];
+    angle = pos[2];
     piece = layout[i];
     color("black")
     joint(start_point, angle);
