@@ -58,6 +58,11 @@ module c_curve(start_point, angle) {
 }
 
 module bridge(start_point, angle) {
+    let (
+        rad_o = 58,
+        rad_i = 16,
+        cent_o = 12
+    )
     translate(start_point)
     rotate([0, 0, angle])
     translate([0, half_w, 0])
@@ -65,17 +70,26 @@ module bridge(start_point, angle) {
     linear_extrude(track_width) {
         difference() {
             union() {
-                square([2*track_length, track_height]);
-                translate([track_length, 0, 0])
+                square([2*track_length, 20]);
                 difference() {
-                    circle(track_length/2);
-                    circle(track_length/2 - track_height);
-                    translate([-track_length/2, -track_length/2, 0])
-                    square([track_length, track_length/2]);
+                    translate([track_length, 0, 0])
+                    circle(24);
+                    translate([0, -track_length, 0])
+                    square([2*track_length, track_length]);
                 }
             }
-            translate([track_length/2 + track_height, 0, 0])
-            square([track_length - 2*track_height, track_height]);
+            translate([cent_o, rad_o, 0])
+            circle(rad_o - track_height);
+            translate([0, track_height, 0])
+            square(cent_o);
+            translate([2*track_length-cent_o, rad_o, 0])
+            circle(rad_o - track_height);
+            translate([2*track_length-cent_o, track_height, 0])
+            square(cent_o);
+            translate([track_length-rad_i, 0, 0])
+            square([rad_i*2, track_height]);
+            translate([track_length, track_height, 0])
+            circle(rad_i);
         }
     }
 }
