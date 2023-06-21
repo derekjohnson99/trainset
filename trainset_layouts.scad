@@ -103,9 +103,8 @@ function new_cursor(cursor, piece) = (
     [x, y, angle]
 );
 
-// Vector of the track piece details (length and angle) for each piece
-// in the track layout
-piece_details = [ for (piece = layout)
+// Function to return the length and angle of each type of track piece
+function piece_details(piece) = (
     let (
         length = (piece == "A") ?
             track_length * 2 * sin(curve_angle/2)
@@ -129,21 +128,21 @@ piece_details = [ for (piece = layout)
             undef
     )
     [length, angle]
-];
+);
 
 // Function to give the final cursor position (x, y and angle) of the
 // given piece number in the layout
 function place_piece(i) = (
     i == 0 ?
-        new_cursor(origin, piece_details[i])
+        new_cursor(origin, piece_details(layout[i]))
     :
-        new_cursor(place_piece(i-1), piece_details[i])
+        new_cursor(place_piece(i-1), piece_details(layout[i]))
 );
 
 // Vector of all the track positions for the given track layout
 positions = [
     origin,
-    for (i = [0 : len(piece_details)-1])
+    for (i = [0 : len(layout)-1])
         place_piece(i)
 ];
 
