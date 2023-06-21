@@ -59,7 +59,7 @@ module c_curve(start_point, angle) {
 
 module bridge(start_point, angle) {
     let (
-        rad_o = 58,
+        rad_o = 62,
         rad_i = 16,
         cent_o = 12
     )
@@ -72,8 +72,8 @@ module bridge(start_point, angle) {
             union() {
                 square([2*track_length, 20]);
                 difference() {
-                    translate([track_length, 0, 0])
-                    circle(24);
+                    translate([track_length, track_height, 0])
+                    circle(20);
                     translate([0, -track_length, 0])
                     square([2*track_length, track_length]);
                 }
