@@ -48,11 +48,23 @@ module c_curve(start_point, angle) {
 module bridge(start_point, angle) {
     translate(start_point)
     rotate([0, 0, angle])
-    translate([0, -half_w, 0])
-    difference() {
-        cube([2*track_length, track_width, 5*track_height]);
-        translate([8,0,0])
-        cube([2*track_length-16, track_width, 4*track_height]);
+    translate([0, half_w, 0])
+    rotate([90, 0, 0])
+    linear_extrude(track_width) {
+        difference() {
+            union() {
+                square([2*track_length, track_height]);
+                translate([track_length, 0, 0])
+                difference() {
+                    circle(track_length/2);
+                    circle(track_length/2 - track_height);
+                    translate([-track_length/2, -track_length/2, 0])
+                    square([track_length, track_length/2]);
+                }
+            }
+            translate([track_length/2 + track_height, 0, 0])
+            square([track_length - 2*track_height, track_height]);
+        }
     }
 }
 
@@ -133,7 +145,7 @@ for (i = [0 : len(layout)-1])
     if (piece == "A")
     {
         color("blue")
-        a_curve((start_point), angle);
+        a_curve(start_point, angle);
     }
     else if (piece == "C")
     {
