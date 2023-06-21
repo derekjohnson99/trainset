@@ -104,9 +104,9 @@ function piece_details(piece) = (
         :
             undef,
         angle =  (piece == "A") ?
-            curve_angle
+            curve_angle/2
         : (piece == "C") ?
-            -curve_angle
+            -curve_angle/2
         : (piece == "S") ?
             0
         : (piece == "B") ?
@@ -123,7 +123,7 @@ function new_cursor(cursor, piece) = (
     let (
         piece_detail = piece_details(piece),
         p_len = piece_detail[0],
-        p_angle = piece_detail[1] / 2,
+        p_angle = piece_detail[1],
         x = cursor[0] + p_len * cos(cursor[2] + p_angle),
         y = cursor[1] + p_len * sin(cursor[2] + p_angle),
         angle = cursor[2] + 2 * p_angle
