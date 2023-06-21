@@ -1,6 +1,18 @@
 // OpenSCAD file to display all possible layouts of Ikea Lillabo 20-piece basic trainset
 
-layout = "BAAAAAASSCCCCCC";
+layouts = [
+    "BAASSAAAACCAAAA",
+    "BAAAAAASSCCCCCC",
+    "BAAAASSACAAAAAC",
+    "BAAAASACSAAAAAC",
+    "BAAAAACSSAAAAAC",
+    "BAASSAAACAACAAA",
+    "BAAAASSCAAAAACA",
+    "BAAAASCASAAAACA",
+    "BAAAACASSAAAACA",
+    "BAAACAASSAAACAA"
+];
+layout = layouts[1];
 track_width = 8;
 track_length = 64;
 track_height = 4;
