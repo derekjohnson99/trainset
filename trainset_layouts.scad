@@ -22,16 +22,12 @@ p_w = track_length + half_w;
 curve_angle = 360 / curves_in_circle;
 origin = [0, 0, 0];
 
-module straight(start_point, angle) {
-    translate(start_point)
-    rotate([0, 0, angle])
+module straight() {
     translate([0, -half_w, 0])
     cube([track_length, track_width, track_height]);
 }
 
-module a_curve(start_point, angle) {
-    translate(start_point)
-    rotate([0, 0, angle])
+module a_curve() {
     translate([0, track_length])
     linear_extrude(track_height) {
         difference() {
@@ -43,9 +39,7 @@ module a_curve(start_point, angle) {
     }
 }
 
-module c_curve(start_point, angle) {
-    translate(start_point)
-    rotate([0, 0, angle])
+module c_curve() {
     translate([0, -track_length])
     linear_extrude(track_height) {
         difference() {
@@ -57,9 +51,7 @@ module c_curve(start_point, angle) {
     }
 }
 
-module bridge(start_point, angle) {
-    translate(start_point)
-    rotate([0, 0, angle])
+module bridge() {
     let (
         rad_o = 62,
         rad_i = 16,
@@ -94,9 +86,7 @@ module bridge(start_point, angle) {
     }
 }
 
-module joint(start_point, angle) {
-    translate(start_point)
-    rotate([0, 0, angle])
+module joint() {
     translate([-0.2, -half_w, 0])
     cube([0.4, track_width, track_height + 1]);
 }
@@ -166,27 +156,32 @@ for (i = [0 : len(layout)-1])
     pos = positions[i];
     start_point = [pos[0], pos[1], 0];
     angle = pos[2];
-    piece = layout[i];
-    color("black")
-    joint(start_point, angle);
-    if (piece == "A")
+    translate(start_point)
+    rotate([0, 0, angle])
     {
-        color("blue")
-        a_curve(start_point, angle);
-    }
-    else if (piece == "C")
-    {
-        color("magenta")
-        c_curve(start_point, angle);
-    }
-    else if (piece == "S")
-    {
-        color("lime")
-        straight(start_point, angle);
-    }
-    else if (piece == "B")
-    {
-        color("red")
-        bridge(start_point, angle);
+        color("black")
+        joint();
+
+        piece = layout[i];
+        if (piece == "A")
+        {
+            color("blue")
+            a_curve();
+        }
+        else if (piece == "C")
+        {
+            color("magenta")
+            c_curve();
+        }
+        else if (piece == "S")
+        {
+            color("lime")
+            straight();
+        }
+        else if (piece == "B")
+        {
+            color("red")
+            bridge();
+        }
     }
 }
