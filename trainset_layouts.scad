@@ -58,13 +58,13 @@ module c_curve(start_point, angle) {
 }
 
 module bridge(start_point, angle) {
+    translate(start_point)
+    rotate([0, 0, angle])
     let (
         rad_o = 62,
         rad_i = 16,
         cent_o = 12
     )
-    translate(start_point)
-    rotate([0, 0, angle])
     translate([0, half_w, 0])
     rotate([90, 0, 0])
     linear_extrude(track_width) {
@@ -107,23 +107,23 @@ $fs = 0.4;
 // Function to return the length and angle of each type of track piece
 function piece_details(piece) = (
     let (
-        length = (piece == "A") ?
+        length = piece == "A" ?
             track_length * 2 * sin(curve_angle/2)
-        : (piece == "C") ?
+        : piece == "C" ?
             track_length * 2 * sin(curve_angle/2)
-        : (piece == "S") ?
+        : piece == "S" ?
             track_length * 1
-        : (piece == "B") ?
+        : piece == "B" ?
             track_length * 2
         :
             undef,
-        angle =  (piece == "A") ?
-            curve_angle/2
-        : (piece == "C") ?
-            -curve_angle/2
-        : (piece == "S") ?
+        angle = piece == "A" ?
+            curve_angle / 2
+        : piece == "C" ?
+            -curve_angle / 2
+        : piece == "S" ?
             0
-        : (piece == "B") ?
+        : piece == "B" ?
             0
         :
             undef
