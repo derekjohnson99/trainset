@@ -30,11 +30,12 @@ module straight() {
 module a_curve() {
     translate([0, track_length])
     linear_extrude(track_height) {
-        difference() {
-            circle(track_length + half_w);
-            circle(track_length - half_w);
-            polygon([[0, 0], [0, -p_w], [-p_w, -p_w], [-p_w, p_w], [p_w, p_w], [p_w, 0]]);
-            polygon([[0, 0], [p_w, 0], [p_w, -p_w]]);
+        intersection() {
+            polygon([[0, 0], [p_w, -p_w], [0, -p_w]]);
+            difference() {
+                circle(track_length + half_w);
+                circle(track_length - half_w);
+            }
         }
     }
 }
@@ -42,11 +43,12 @@ module a_curve() {
 module c_curve() {
     translate([0, -track_length])
     linear_extrude(track_height) {
-        difference() {
-            circle(track_length + half_w);
-            circle(track_length - half_w);
-            polygon([[0, 0], [0, p_w], [-p_w, p_w], [-p_w, -p_w], [p_w, -p_w], [p_w, 0]]);
-            polygon([[0, 0], [p_w, 0], [p_w, p_w]]);
+        intersection() {
+            polygon([[0, 0], [p_w, p_w], [0, p_w]]);
+            difference() {
+                circle(track_length + half_w);
+                circle(track_length - half_w);
+            }
         }
     }
 }
