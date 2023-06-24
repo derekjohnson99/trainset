@@ -63,6 +63,7 @@ module bridge() {
     rotate([90, 0, 0])
     linear_extrude(track_width) {
         difference() {
+            // Base of bridge and top arch
             union() {
                 square([2*track_length, 20]);
                 difference() {
@@ -72,14 +73,17 @@ module bridge() {
                     square([2*track_length, track_length]);
                 }
             }
+            // Left hand slope
             translate([cent_o, rad_o, 0])
             circle(rad_o - track_height);
             translate([0, track_height, 0])
             square(cent_o);
+            // Right hand slope
             translate([2*track_length-cent_o, rad_o, 0])
             circle(rad_o - track_height);
             translate([2*track_length-cent_o, track_height, 0])
             square(cent_o);
+            // Inner arch
             translate([track_length-rad_i, 0, 0])
             square([rad_i*2, track_height]);
             translate([track_length, track_height, 0])
