@@ -65,7 +65,8 @@ module bridge() {
             )
             [i, height_range + track_height + cos(180 + (i * t_ratio)) * height_range],
             [track_length * 2, 0]
-        ]
+        ],
+        side_arch_distance = track_length / 2 + 4
     )
     translate([0, half_w, 0])
     rotate([90, 0, 0])
@@ -77,9 +78,9 @@ module bridge() {
             circle(inner_radius);
             translate([track_length - inner_radius, 0, 0])
             square([inner_radius * 2, track_height]);
-            translate([track_length/2 + 4, 0, 0])
+            translate([side_arch_distance, 0, 0])
             circle(8);
-            translate([2 * track_length - track_length/2 - 4, 0, 0])
+            translate([2 * track_length - side_arch_distance, 0, 0])
             circle(8);
         }
     }
