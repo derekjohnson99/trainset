@@ -77,6 +77,10 @@ module bridge() {
             circle(inner_radius);
             translate([track_length - inner_radius, 0, 0])
             square([inner_radius * 2, track_height]);
+            translate([track_length/2 + 4, 0, 0])
+            circle(8);
+            translate([2 * track_length - track_length/2 - 4, 0, 0])
+            circle(8);
         }
     }
 }
