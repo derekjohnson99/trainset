@@ -55,39 +55,28 @@ module c_curve() {
 
 module bridge() {
     let (
-        rad_o = 62,
-        rad_i = 16,
-        cent_o = 12
+        inner_radius = 12,
+        bridge_shape = [
+            [0, 0],
+            for (i = [0 : 2 * track_length])
+            let (
+                height_range = 8,
+                t_ratio = 360 / (track_length * 2)
+            )
+            [i, height_range + track_height + cos(180 + (i * t_ratio)) * height_range],
+            [track_length * 2, 0]
+        ]
     )
     translate([0, half_w, 0])
     rotate([90, 0, 0])
     linear_extrude(track_width) {
         difference() {
-            // Base of bridge and top arch
-            union() {
-                square([2*track_length, 20]);
-                difference() {
-                    translate([track_length, track_height, 0])
-                    circle(20);
-                    translate([0, -track_length, 0])
-                    square([2*track_length, track_length]);
-                }
-            }
-            // Left hand slope
-            translate([cent_o, rad_o, 0])
-            circle(rad_o - track_height);
-            translate([0, track_height, 0])
-            square(cent_o);
-            // Right hand slope
-            translate([2*track_length-cent_o, rad_o, 0])
-            circle(rad_o - track_height);
-            translate([2*track_length-cent_o, track_height, 0])
-            square(cent_o);
+            polygon(bridge_shape);
             // Inner arch
-            translate([track_length-rad_i, 0, 0])
-            square([rad_i*2, track_height]);
             translate([track_length, track_height, 0])
-            circle(rad_i);
+            circle(inner_radius);
+            translate([track_length - inner_radius, 0, 0])
+            square([inner_radius * 2, track_height]);
         }
     }
 }
