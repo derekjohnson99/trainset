@@ -26,9 +26,9 @@ sps = [
     for (i = [0 : 9])
         let (
             s_a = 36 * i,
-            sp = 3 * track_length
+            sp = 5 * track_length
         )
-        [sp * sin(s_a), sp * cos(s_a), s_a]
+        [sp * cos(s_a), sp * sin(s_a), s_a]
 ];
 echo(sps);
 
@@ -148,22 +148,21 @@ function new_cursor(cursor, piece) = (
 
 // Function to give the final cursor position (x, y and angle) of the
 // given piece number in the layout
-function place_piece(i) = (
+function place_piece(i, start_point) = (
     i == 0 ?
-        new_cursor(origin, layout[i])
+        new_cursor(start_point, layout[i])
     :
-        new_cursor(place_piece(i-1), layout[i])
+        new_cursor(place_piece(i-1, start_point), layout[i])
 );
 
-// Vector of all the track positions for the given track layout
-positions = [
-    origin,
-    for (i = [0 : len(layout)-1])
-        place_piece(i)
-];
 
 for (i = [0 : len(layout)-1])
 {
+    positions = [
+        sps[0],
+        for (i = [0 : len(layout)-1])
+            place_piece(i, sps[0])
+    ];
     pos = positions[i];
     start_point = [pos[0], pos[1], 0];
     angle = pos[2];
