@@ -22,6 +22,16 @@ p_w = track_length + half_w;
 curve_angle = 360 / curves_in_circle;
 origin = [0, 0, 0];
 
+sps = [
+    for (i = [0 : 9])
+        let (
+            s_a = 36 * i,
+            sp = 3 * track_length
+        )
+        [sp * sin(s_a), sp * cos(s_a), s_a]
+];
+echo(sps);
+
 module straight() {
     translate([0, -half_w, 0])
     cube([track_length, track_width, track_height]);
@@ -63,7 +73,7 @@ module bridge() {
                 height_range = 8,
                 t_ratio = 360 / (track_length * 2)
             )
-            [i, height_range + track_height + cos(180 + (i * t_ratio)) * height_range],
+            [i, height_range + track_height - cos(i * t_ratio) * height_range],
             [track_length * 2, 0]
         ],
         side_arch_distance = track_length / 2 + 4
@@ -78,6 +88,7 @@ module bridge() {
             circle(inner_radius);
             translate([track_length - inner_radius, 0, 0])
             square([inner_radius * 2, track_height]);
+            // Side arches
             translate([side_arch_distance, 0, 0])
             circle(8);
             translate([2 * track_length - side_arch_distance, 0, 0])
