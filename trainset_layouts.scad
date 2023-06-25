@@ -15,7 +15,7 @@ layouts = [
 //layout = layouts[1];
 track_width = 8;
 track_length = 64;
-track_height = 4;
+track_height = 2;
 curves_in_circle = 8;
 half_w = track_width / 2;
 p_w = track_length + half_w;
@@ -98,8 +98,8 @@ module bridge() {
 }
 
 module joint() {
-    translate([-0.2, -half_w, 0])
-    cube([0.4, track_width, track_height + 1]);
+    translate([-0.2, -half_w - 0.2, 0])
+    cube([0.4, track_width + 0.4, track_height]);
 }
 
 $fa = 1;
