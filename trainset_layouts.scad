@@ -12,7 +12,7 @@ layouts = [
     "BAAAACASSAAAACA",
     "BAAACAASSAAACAA"
 ];
-layout = layouts[1];
+//layout = layouts[1];
 track_width = 8;
 track_length = 64;
 track_height = 4;
@@ -25,12 +25,12 @@ origin = [0, 0, 0];
 sps = [
     for (i = [0 : 9])
         let (
-            s_a = 36 * i,
-            sp = 5 * track_length
+            s_a = i == 1 ? 45 : 36 * i,
+            sp = 6 * track_length
         )
         [sp * cos(s_a), sp * sin(s_a), s_a]
 ];
-echo(sps);
+//echo(sps);
 
 module straight() {
     translate([0, -half_w, 0])
@@ -148,50 +148,53 @@ function new_cursor(cursor, piece) = (
 
 // Function to give the final cursor position (x, y and angle) of the
 // given piece number in the layout
-function place_piece(i, start_point) = (
+function place_piece(i, start_point, layout) = (
     i == 0 ?
         new_cursor(start_point, layout[i])
     :
-        new_cursor(place_piece(i-1, start_point), layout[i])
+        new_cursor(place_piece(i-1, start_point, layout), layout[i])
 );
 
-
-for (i = [0 : len(layout)-1])
+for (l = [0 : len(layouts)-1])
 {
-    positions = [
-        sps[0],
-        for (i = [0 : len(layout)-1])
-            place_piece(i, sps[0])
-    ];
-    pos = positions[i];
-    start_point = [pos[0], pos[1], 0];
-    angle = pos[2];
-    translate(start_point)
-    rotate([0, 0, angle])
+    layout = layouts[l];
+    for (i = [0 : len(layout)-1])
     {
-        color("black")
-        joint();
+        positions = [
+            sps[l],
+            for (i = [0 : len(layout)-1])
+                place_piece(i, sps[l], layout)
+        ];
+        pos = positions[i];
+        start_point = [pos[0], pos[1], 0];
+        angle = pos[2];
+        translate(start_point)
+        rotate([0, 0, angle])
+        {
+            color("black")
+            joint();
 
-        piece = layout[i];
-        if (piece == "A")
-        {
-            color("blue")
-            a_curve();
-        }
-        else if (piece == "C")
-        {
-            color("magenta")
-            c_curve();
-        }
-        else if (piece == "S")
-        {
-            color("lime")
-            straight();
-        }
-        else if (piece == "B")
-        {
-            color("red")
-            bridge();
+            piece = layout[i];
+            if (piece == "A")
+            {
+                color("blue")
+                a_curve();
+            }
+            else if (piece == "C")
+            {
+                color("magenta")
+                c_curve();
+            }
+            else if (piece == "S")
+            {
+                color("lime")
+                straight();
+            }
+            else if (piece == "B")
+            {
+                color("red")
+                bridge();
+            }
         }
     }
 }
