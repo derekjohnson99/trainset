@@ -12,9 +12,9 @@ layouts = [
     "BAAAACASSAAAACA",
     "BAAACAASSAAACAA"
 ];
-//layout = layouts[1];
-track_width = 8;
-track_length = 64;
+
+track_width = 7;
+track_length = 56;
 track_height = 2;
 curves_in_circle = 8;
 half_w = track_width / 2;
@@ -22,15 +22,14 @@ p_w = track_length + half_w;
 curve_angle = 360 / curves_in_circle;
 origin = [0, 0, 0];
 
-sps = [
+layout_start = [
     for (i = [0 : 9])
         let (
-            s_a = i == 1 ? 45 : 36 * i,
-            sp = 6 * track_length
+            angle = i == 1 ? 45 : 36 * i,
+            radius = 6 * track_length
         )
-        [sp * cos(s_a), sp * sin(s_a), s_a]
+        [radius * cos(angle), radius * sin(angle), angle]
 ];
-//echo(sps);
 
 module straight() {
     translate([0, -half_w, 0])
@@ -161,9 +160,9 @@ for (l = [0 : len(layouts)-1])
     for (i = [0 : len(layout)-1])
     {
         positions = [
-            sps[l],
+            layout_start[l],
             for (i = [0 : len(layout)-1])
-                place_piece(i, sps[l], layout)
+                place_piece(i, layout_start[l], layout)
         ];
         pos = positions[i];
         start_point = [pos[0], pos[1], 0];
