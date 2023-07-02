@@ -167,6 +167,7 @@ for (l = [0 : len(layouts)-1])
         pos = positions[i];
         start_point = [pos[0], pos[1], 0];
         angle = pos[2];
+        col = i % 2 == 0 ? "navy" : "yellow";
         translate(start_point)
         rotate([0, 0, angle])
         {
@@ -176,17 +177,17 @@ for (l = [0 : len(layouts)-1])
             piece = layout[i];
             if (piece == "A")
             {
-                color("blue")
+                color(col)
                 a_curve();
             }
             else if (piece == "C")
             {
-                color("magenta")
+                color(col)
                 c_curve();
             }
             else if (piece == "S")
             {
-                color("lime")
+                color(col)
                 straight();
             }
             else if (piece == "B")
