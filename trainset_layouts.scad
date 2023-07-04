@@ -28,7 +28,7 @@ layout_start = [
             angle = i == 1 ? 45 : 36 * i,
             radius = 6 * track_length
         )
-        [radius * cos(angle), radius * sin(angle), angle]
+        [[radius * cos(angle), radius * sin(angle), 0], angle]
 ];
 
 module straight() {
@@ -138,11 +138,14 @@ function new_cursor(cursor, piece) = (
         piece_detail = piece_details(piece),
         p_len = piece_detail[0],
         p_angle = piece_detail[1],
-        x = cursor[0] + p_len * cos(cursor[2] + p_angle),
-        y = cursor[1] + p_len * sin(cursor[2] + p_angle),
-        angle = cursor[2] + 2 * p_angle
+        coord = cursor[0],
+        c_angle = cursor[1],
+        x = coord.x + p_len * cos(c_angle + p_angle),
+        y = coord.y + p_len * sin(c_angle + p_angle),
+        z = coord.z,
+        angle = c_angle + 2 * p_angle
     )
-    [x, y, angle]
+    [[x, y, z], angle]
 );
 
 // Function to give the final cursor position (x, y and angle) of the
@@ -164,9 +167,8 @@ for (l = [0 : len(layouts)-1])
             for (i = [0 : len(layout)-1])
                 place_piece(i, layout_start[l], layout)
         ];
-        pos = positions[i];
-        start_point = [pos[0], pos[1], 0];
-        angle = pos[2];
+        start_point = positions[i][0];
+        angle = positions[i][1];
         col = i % 2 == 0 ? "navy" : "yellow";
         translate(start_point)
         rotate([0, 0, angle])
