@@ -150,33 +150,37 @@ function new_cursor(cursor, piece) = (
 
 // Function to give the final cursor position (x, y and angle) of the
 // given piece number in the layout
-function place_piece(i, start_point, layout) = (
+function place_piece(i, l) = (
+    let (
+        piece = layouts[l][i]
+    )
     i == 0 ?
-        new_cursor(start_point, layout[i])
+        new_cursor([[0, 0, 0], 0], piece)
     :
-        new_cursor(place_piece(i-1, start_point, layout), layout[i])
+        new_cursor(place_piece(i-1, l), piece)
 );
 
 for (l = [0 : len(layouts)-1])
 {
-    layout = layouts[l];
-    for (i = [0 : len(layout)-1])
+    translate(layout_start[l][0])
+    rotate(layout_start[l][1])
+    for (i = [0 : len(layouts[l])-1])
     {
         positions = [
-            layout_start[l],
-            for (i = [0 : len(layout)-1])
-                place_piece(i, layout_start[l], layout)
+            [[0, 0, 0,], 0],
+            for (i = [0 : len(layouts[l])-1])
+                place_piece(i, l)
         ];
         start_point = positions[i][0];
         angle = positions[i][1];
         col = i % 2 == 0 ? "navy" : "yellow";
         translate(start_point)
-        rotate([0, 0, angle])
+        rotate(angle)
         {
             color("black")
             joint();
 
-            piece = layout[i];
+            piece = layouts[l][i];
             if (piece == "A")
             {
                 color(col)
