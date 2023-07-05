@@ -177,31 +177,28 @@ for (l = [0 : len(layouts)-1])
         piece = layouts[l][p];
         piece_start = piece_positions[p][0];
         piece_angle = piece_positions[p][1];
-        piece_colour = p % 2 == 0 ? "navy" : "yellow";
+        piece_colour = piece == "B" ? "red" : p % 2 == 0 ? "navy" : "yellow";
         translate(piece_start)
         rotate(piece_angle)
         {
             color("black")
             joint();
 
+            color(piece_colour)
             if (piece == "A")
             {
-                color(piece_colour)
                 a_curve();
             }
             else if (piece == "C")
             {
-                color(piece_colour)
                 c_curve();
             }
             else if (piece == "S")
             {
-                color(piece_colour)
                 straight();
             }
             else if (piece == "B")
             {
-                color("red")
                 bridge();
             }
         }
