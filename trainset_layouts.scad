@@ -22,15 +22,6 @@ p_w = track_length + half_w;
 curve_angle = 360 / curves_in_circle;
 origin = [0, 0, 0];
 
-layout_start = [
-    for (i = [0 : 9])
-        let (
-            angle = i == 1 ? 45 : 36 * i,
-            radius = 6 * track_length
-        )
-        [[radius * cos(angle), radius * sin(angle), 0], angle]
-];
-
 module straight() {
     translate([0, -half_w, 0])
     cube([track_length, track_width, track_height]);
@@ -162,21 +153,24 @@ function place_piece(layout_no, piece_no) = (
 
 for (l = [0 : len(layouts)-1])
 {
-    layout_pieces = len(layouts[l]);
-    layout_point = layout_start[l][0];
-    layout_angle = layout_start[l][1];
-    piece_positions = [
+    piece_count = len(layouts[l]);
+    layout_angle = l == 1 ? 45 : 36 * l;
+    radius = 6 * track_length;
+    layout_point = [radius * cos(layout_angle), radius * sin(layout_angle), 0];
+    piece_position = [
         [[0, 0, 0,], 0],
-        for (p = [0 : layout_pieces-1])
+        for (p = [0 : piece_count-1])
             place_piece(l, p)
     ];
+
     translate(layout_point)
     rotate(layout_angle)
-    for (p = [0 : layout_pieces-1])
+
+    for (p = [0 : piece_count-1])
     {
         piece = layouts[l][p];
-        piece_start = piece_positions[p][0];
-        piece_angle = piece_positions[p][1];
+        piece_start = piece_position[p][0];
+        piece_angle = piece_position[p][1];
         piece_colour = piece == "B" ? "red" : p % 2 == 0 ? "navy" : "yellow";
         translate(piece_start)
         rotate(piece_angle)
