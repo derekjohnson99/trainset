@@ -156,7 +156,7 @@ for (l = [0 : len(layouts)-1])
     piece_count = len(layouts[l]);
     layout_angle = l == 0 ? 0 : 40 * l;
     radius = 6 * track_length;
-    layout_point = l == 0 ? [0, 0, 0] :
+    layout_point = l == 0 ? [-track_length, 0, 0] :
         [radius * cos(layout_angle), radius * sin(layout_angle), 0];
     piece_position = [
         [[0, 0, 0,], 0],
