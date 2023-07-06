@@ -1,8 +1,8 @@
 // OpenSCAD file to display all possible layouts of Ikea Lillabo 20-piece basic trainset
 
 layouts = [
-    "BAASSAAAACCAAAA",
     "BAAAAAASSCCCCCC",
+    "BAASSAAAACCAAAA",
     "BAAAASSACAAAAAC",
     "BAAAASACSAAAAAC",
     "BAAAAACSSAAAAAC",
@@ -154,9 +154,10 @@ function place_piece(layout_no, piece_no) = (
 for (l = [0 : len(layouts)-1])
 {
     piece_count = len(layouts[l]);
-    layout_angle = l == 1 ? 45 : 36 * l;
+    layout_angle = l == 0 ? 0 : 40 * l;
     radius = 6 * track_length;
-    layout_point = [radius * cos(layout_angle), radius * sin(layout_angle), 0];
+    layout_point = l == 0 ? [0, 0, 0] :
+        [radius * cos(layout_angle), radius * sin(layout_angle), 0];
     piece_position = [
         [[0, 0, 0,], 0],
         for (p = [0 : piece_count-1])
