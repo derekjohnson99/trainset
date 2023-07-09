@@ -92,6 +92,31 @@ module joint() {
     cube([0.4, track_width + 0.4, track_height]);
 }
 
+module train_engine() {
+    translate([0, -4, 1])
+    cube([8, 8, 6]);
+    translate([8, 0, 3.5])
+    rotate([0, 90, 0])
+    cylinder(7, 2.5, 2.5);
+    // smokestack
+    translate([13, 0, 5])
+    cylinder(5, 1, 1);
+    // back wheels
+    translate([4, -half_w, 2])
+    rotate([90, 0, 0])
+    cylinder(0.5, 2, 2);
+    translate([4, half_w, 2])
+    rotate([90, 0, 0])
+    cylinder(0.5, 2, 2);
+    // front wheels
+    translate([13, -3, 2])
+    rotate([90, 0, 0])
+    cylinder(0.5, 2, 2);
+    translate([13, 3, 2])
+    rotate([90, 0, 0])
+    cylinder(0.5, 2, 2);
+}
+
 $fa = 1;
 $fs = 0.4;
 
@@ -155,9 +180,11 @@ for (l = [0 : len(layouts)-1])
 {
     piece_count = len(layouts[l]);
     layout_angle = l == 0 ? 0 : 40 * l;
+    //layout_angle = 0;
     radius = 6 * track_length;
     layout_point = l == 0 ? [-track_length, 0, 0] :
         [radius * cos(layout_angle), radius * sin(layout_angle), 0];
+    //layout_point = [-track_length, 0, 0];
     piece_position = [
         [[0, 0, 0,], 0],
         for (p = [0 : piece_count-1])
@@ -199,3 +226,8 @@ for (l = [0 : len(layouts)-1])
         }
     }
 }
+
+color("green")
+rotate(90)
+translate([28, 0, track_height])
+train_engine();
